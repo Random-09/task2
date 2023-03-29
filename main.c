@@ -3,19 +3,15 @@
 #include <string.h>
 
 
-int binarySearch(char arr[], int low, int high, char key) {
+int binary_search(char array[], int low, int high, char index) {
     if (low <= high) {
         int mid = (low + high) / 2;
-
-        if (arr[mid] == key) {
+        if (array[mid] == index)
             return mid;
-        }
-        else if (arr[mid] > key) {
-            return binarySearch(arr, low, mid - 1, key);
-        }
-        else {
-            return binarySearch(arr, mid + 1, high, key);
-        }
+        else if (array[mid] > index)
+            return binary_search(array, low, mid - 1, index);
+        else
+            return binary_search(array, mid + 1, high, index);
     }
     return -1;
 }
@@ -39,24 +35,38 @@ int partition(char array[], int low, int high) {
     return (i + 1);
 }
 
-void quickSort(char array[], int low, int high) {
+void quick_sort(char array[], int low, int high) {
     if (low < high) {
         int pivot_index = partition(array, low, high);
-        quickSort(array, low, pivot_index - 1);
-        quickSort(array, pivot_index + 1, high);
+        quick_sort(array, low, pivot_index - 1);
+        quick_sort(array, pivot_index + 1, high);
     }
+}
+
+int is_printable(const char array[], int array_size) {
+    for (int i = 0; i < array_size; i++) {
+        if (array[i] > 126 || array[i] < 33) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 int main(int argc, char **argv) {
     if (argc == 4) {
         int array_size = strtol(argv[1], NULL, 10);
         char array[array_size];
-        char character[2];
+        char character = *argv[3];
         strcpy(array, argv[2]);
-        strcpy(character, argv[3]);
-        quickSort(array, 0, array_size - 1);
-        int num = binarySearch(array, 0, array_size - 1, 'z');
-        printf("%d", num);
+        if (is_printable(array, array_size)) {
+            quick_sort(array, 0, array_size - 1);
+            int index = binary_search(array, 0, array_size - 1, character);
+            if (index != -1)
+                printf("Index of character %c in sorted array is: %d", character, index);
+            else
+                printf("Character not found");
+        } else
+            printf("Please choose printable ASCII symbols");
     } else
-        printf("wrong number of arguments");
+        printf("Wrong number of arguments");
 }
