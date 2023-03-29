@@ -3,42 +3,39 @@
 #include <string.h>
 
 
-void swap(char *first, char *second) {
-    char temporary = *first;
-    *first = *second;
-    *second = temporary;
+void swap(char *a, char *b) {
+    char temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
-int partition(char array[], int low, int high) {
-    char pivot = array[high];
+int partition(char arr[], int low, int high) {
+    char pivot = arr[high];
     int i = (low - 1);
-    for (int j = low; j < high; j++) {
-        if (array[j] <= pivot) {
+    for (int j = low; j <= high - 1; j++) {
+        if (arr[j] < pivot) {
             i++;
-            swap(&array[i], &array[j]);
+            swap(&arr[i], &arr[j]);
         }
     }
-    swap(&array[i + 1], &array[high]);
+    swap(&arr[i + 1], &arr[high]);
     return (i + 1);
 }
 
-void quick_sort(char array[], int low, int high) {
+void quickSort(char arr[], int low, int high) {
     if (low < high) {
-        int pi = partition(array, low, high);
-        quick_sort(array, low, pi - 1);
-        quick_sort(array, pi + 1, high);
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
     }
 }
 
-
-int main(int argc, char *argv[]) {
-    if (argc == 4) {
-        int array_size = strtol(argv[1], NULL, 10);
-        char array[array_size];
-        char character[1];                                                  // <-- Try to fix
-        strcpy(array, argv[2]);
-        strcpy(character, argv[3]);
-
-    } else
-        printf("Wrong number of arguments!");
+int main() {
+    char arr[] = {'a', 'd', 'b', 'c', 'f', 'e'};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    quickSort(arr, 0, n - 1);
+    printf("Sorted array: ");
+    for (int i = 0; i < n; i++)
+        printf("%c ", arr[i]);
+    return 0;
 }
